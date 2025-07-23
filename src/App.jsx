@@ -1,29 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import AddTask from './components/AddTask';
 import Tasks from './components/Tasks';
+import Title from './components/Title';
 
 function App() {
-     const [tasks, setTasks] = useState([
-          {
-               id: 1,
-               title: 'Estudar React',
-               description: 'Estudar React com redux e fazer projetos',
-               isCompleted: false,
-          },
-          {
-               id: 2,
-               title: 'Estudar ingles',
-               description: 'Estudar ingles para trabalhar no mercado',
-               isCompleted: false,
-          },
-          {
-               id: 3,
-               title: 'Correr na academia',
-               description: 'Fazer 3km de corrida na esteira',
-               isCompleted: false,
-          },
-     ]);
+     const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) || []);
+
+     useEffect(() => {
+          const json = JSON.stringify(tasks);
+          localStorage.setItem('tasks', json);
+     }, [tasks]);
 
      function onTaskClick(taskId) {
           const newTasks = tasks.map(task => {
@@ -57,7 +44,7 @@ function App() {
      return (
           <div className="w-screen h-screen bg-slate-500 flex justify-center p-6">
                <div className="w-[500px] space-y-4">
-                    <h1 className="text-3xl text-slate-100 font-bold text-center">Task Manager</h1>
+                    <Title>Task Manager</Title>
                     <AddTask onAddTaskSubmit={onAddTaskSubmit} />
                     <Tasks
                          tasks={tasks}
